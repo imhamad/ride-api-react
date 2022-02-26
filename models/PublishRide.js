@@ -8,13 +8,25 @@ const publishRideSchema = mongoose.Schema({
     type: String,
     required: true,
   },
+  name: {
+    type: String,
+    required: true,
+  },
+  email: {
+    type: String,
+    required: true,
+  },
+  phone: {
+    type: Number,
+    required: true,
+  },
   passenger: {
     type: Number,
     required: true,
   },
   date: {
     type: Date,
-    default: Date.now,
+    required: true,
   },
 });
 

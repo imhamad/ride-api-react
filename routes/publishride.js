@@ -5,6 +5,7 @@ const PublishRide = require("../models/PublishRide");
 publishrideRoute.get("/", async (req, res) => {
   try {
     const publishrideResponse = await PublishRide.find();
+    console.log(publishrideResponse);
     res.json(publishrideResponse);
   } catch (err) {
     console.log(err);
@@ -17,7 +18,11 @@ publishrideRoute.post("/", async (req, res) => {
     const publishride = await PublishRide.create({
       goingfrom: req.body.goingfrom,
       goingto: req.body.goingto,
+      name: req.body.name,
+      email: req.body.email,
+      phone: req.body.phone,
       passenger: req.body.passenger,
+      date: req.body.date,
     });
     res.send(publishride);
   } catch (error) {
