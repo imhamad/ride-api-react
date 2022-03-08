@@ -5,6 +5,7 @@ const Joi = require("joi");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const verifyToken = require("../middleware/verifyToken");
+const upload = require("../middleware/upload-image");
 
 const userSchema = Joi.object({
   fullName: Joi.string().min(3).max(100).required(),
@@ -69,6 +70,31 @@ userRoute.post("/login", async (req, res) => {
     }
   }
 });
+
+userRoute.post("/upload", upload.single("image"), async (req, res) => {
+  res.send("Image uploaded...");
+});
+
+// const multer = require("multer");
+// const upload = multer();
+// const fs = require("fs");
+// const { promisify } = require("util");
+// const { nextTick } = require("process");
+// const pipline = promisify(require("stream").pipeline);
+
+// userRoute.post("/upload", upload.single("file"), async (req, res) => {
+//   const { file } = req;
+//   const filename = file.originalname;
+//   if (file.detectedFileExtention != "jpg")
+//     console.log("Only jpg files are allowed");
+//   await pipline(
+//     file.stream,
+//     fs.createWriteStream(`${__dirname}/../public/uploads/${filename}`)
+//   );
+
+//   res.send("File uploaded as " + filename);
+// });
+
 userRoute.patch("/:id", async (req, res) => {
   try {
     const salt = await bcrypt.genSalt(10);
