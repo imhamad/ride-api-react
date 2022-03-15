@@ -24,7 +24,9 @@ publishrideRoute.post("/", async (req, res) => {
       passenger: req.body.passenger,
       date: req.body.date,
     });
-    res.send(publishride);
+    res.send(
+      `Your ride from ${publishride.goingfrom} to ${publishride.goingto} has been published...`
+    );
   } catch (error) {
     console.log(error);
   }

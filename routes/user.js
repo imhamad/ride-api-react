@@ -6,6 +6,8 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const verifyToken = require("../middleware/verifyToken");
 const upload = require("../middleware/upload-image");
+const nodemailer = require("nodemailer");
+// const cors = require("cors");
 
 const userSchema = Joi.object({
   fullName: Joi.string().min(3).max(100).required(),
@@ -18,11 +20,28 @@ const userSchema = Joi.object({
 userRoute.get("/", (req, res) => {
   res.send("we are at user route with get request...");
 });
+
+// user dashboard restricted route
 userRoute.get("/user-dashboard", verifyToken, (req, res) => {
-  res.send("Accessed user dashboard route and user token verified...");
+  res.send("Accessed to user dashboard, user token verified...");
 });
 
-// publishride route with post request
+// Admin dashboard restricted route
+userRoute.get("/admin-dashboard", verifyToken, (req, res) => {
+  res.send("Accessed to Admin dashboard, user token verified...");
+});
+
+// user Register route get request
+userRoute.get("/register", async (req, res) => {
+  try {
+    const userResponse = await User.find();
+    res.json(userResponse);
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+// user Register route with post request
 userRoute.post("/register", async (req, res) => {
   const validationMsg = userSchema.validate(req.body);
 
@@ -48,6 +67,8 @@ userRoute.post("/register", async (req, res) => {
     }
   }
 });
+
+// User login route
 userRoute.post("/login", async (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
@@ -73,6 +94,37 @@ userRoute.post("/login", async (req, res) => {
 
 userRoute.post("/upload", upload.single("image"), async (req, res) => {
   res.send("Image uploaded...");
+});
+
+// send mail from user post request
+userRoute.post("/send-mail", async (req, res) => {
+  const text = req.body.text;
+
+  // function of nodmailer that allow to send email
+  const transport = nodemailer.createTransport({
+    host: process.env.MAIL_HOST,
+    port: 2525,
+    auth: {
+      user: process.env.MAIL_USER,
+      pass: process.env.MAIL_PASS,
+    },
+  });
+
+  // object of mail options
+  try {
+    await transport.sendMail({
+      from: req.body.sender,
+      to: req.body.receiver,
+      subject: "Booking a Ride",
+      html: `<p>${text}</p>`,
+    });
+    res.send(
+      `Mail sent!!!
+      Thank you for booking a ride, have a safe journey...`
+    );
+  } catch (err) {
+    res.send(err);
+  }
 });
 
 // const multer = require("multer");
