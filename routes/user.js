@@ -5,7 +5,6 @@ const Joi = require("joi");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const verifyToken = require("../middleware/verifyToken");
-const upload = require("../middleware/upload-image");
 const nodemailer = require("nodemailer");
 // const cors = require("cors");
 
@@ -36,6 +35,17 @@ userRoute.get("/register", async (req, res) => {
   try {
     const userResponse = await User.find();
     res.json(userResponse);
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+// user Register route get request
+userRoute.get("/:id", async (req, res) => {
+  try {
+    const foundUser = await User.findById(req.params.id);
+    if (!foundUser) return res.status(404).send("User not found");
+    return res.status(200).json(foundUser);
   } catch (err) {
     console.log(err);
   }
@@ -92,10 +102,6 @@ userRoute.post("/login", async (req, res) => {
   }
 });
 
-userRoute.post("/upload", upload.single("image"), async (req, res) => {
-  res.send("Image uploaded...");
-});
-
 // send mail from user post request
 userRoute.post("/send-mail", async (req, res) => {
   const text = req.body.text;
@@ -126,26 +132,6 @@ userRoute.post("/send-mail", async (req, res) => {
     res.send(err);
   }
 });
-
-// const multer = require("multer");
-// const upload = multer();
-// const fs = require("fs");
-// const { promisify } = require("util");
-// const { nextTick } = require("process");
-// const pipline = promisify(require("stream").pipeline);
-
-// userRoute.post("/upload", upload.single("file"), async (req, res) => {
-//   const { file } = req;
-//   const filename = file.originalname;
-//   if (file.detectedFileExtention != "jpg")
-//     console.log("Only jpg files are allowed");
-//   await pipline(
-//     file.stream,
-//     fs.createWriteStream(`${__dirname}/../public/uploads/${filename}`)
-//   );
-
-//   res.send("File uploaded as " + filename);
-// });
 
 userRoute.patch("/:id", async (req, res) => {
   try {

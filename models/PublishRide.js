@@ -20,12 +20,17 @@ const publishRideSchema = mongoose.Schema({
     type: Number,
     required: true,
   },
+  status: {
+    type: String,
+    required: true,
+  },
   passenger: {
     type: Number,
     required: true,
   },
   date: {
     type: Date,
+    Dateformat: "dd/mm/yyyy",
     required: true,
   },
 });
