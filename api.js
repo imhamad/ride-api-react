@@ -9,7 +9,6 @@ const conversationRoute = require("./routes/conversation");
 const messageRoute = require("./routes/message");
 require("dotenv/config");
 const cors = require("cors");
-
 const fileUpload = require("express-fileupload");
 
 app.use(fileUpload());
@@ -23,10 +22,15 @@ app.use("/requestride", requestRideRoute);
 app.use("/conversations", conversationRoute);
 app.use("/messages", messageRoute);
 
-app.post("/upload", (req, res) => {
+// app.use("/static", express.static("uploads"));
+const path = require("path");
+app.use("/static", express.static(path.join(__dirname, "uploads")));
+
+app.post("/upload/:id", (req, res) => {
   if (req.files) {
     const image = req.files.image;
-    const imagename = Date.now() + "_" + image.name;
+    // const imagename = Date.now() + "_" + image.name;
+    const imagename = req.params.id + ".jpg";
     let uploadPath = __dirname + "/uploads/" + imagename;
 
     image.mv(uploadPath, (err) => {
