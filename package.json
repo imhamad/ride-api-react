@@ -1,8 +1,8 @@
 {
   "name": "trusticar_api",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Rest api for ride sharing application",
+  "main": "api.js",
   "scripts": {
     "start": "node api.js"
   },
