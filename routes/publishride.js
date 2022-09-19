@@ -11,17 +11,39 @@ publishrideRoute.get("/", async (req, res) => {
   }
 });
 
+// Single user publish rides 
+publishrideRoute.get("/user_rides", async (req, res) => {
+  const userEmail = req.header("userEmail");
+  try {
+    const publishrideResponse = await PublishRide.find();
+    const userRides = publishrideResponse.filter(ride => ride.email === userEmail);
+    res.json(userRides);
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+// Getting user Search rides
+publishrideRoute.get('/search_rides', async (req, res) => {
+  const { goingFrom, goingTo } = req.body;
+  try {
+    const publishrides = await PublishRide.find();
+    const searchRides = publishrides.filter(ride => ride.goingfrom === goingFrom && ride.goingto === goingTo);
+    res.json(searchRides);
+  } catch (err) {
+    console.log(err);
+  }
+});
+
 // publishride route with post request
 publishrideRoute.post("/", async (req, res) => {
   try {
     const publishride = await PublishRide.create({
       goingfrom: req.body.goingfrom,
       goingto: req.body.goingto,
-      name: req.body.name,
-      email: req.body.email,
-      phone: req.body.phone,
       status: req.body.status,
       passenger: req.body.passenger,
+      ridePublisherId: req.body.ridePublisherId,
       date: req.body.date,
     });
     res.send(

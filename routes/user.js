@@ -40,7 +40,7 @@ userRoute.get("/register", async (req, res) => {
   }
 });
 
-// user Register route get request
+// get single user
 userRoute.get("/:id", async (req, res) => {
   try {
     const foundUser = await User.findById(req.params.id);
@@ -51,7 +51,7 @@ userRoute.get("/:id", async (req, res) => {
   }
 });
 
-// user Register route with post request
+// user Register route post request
 userRoute.post("/register", async (req, res) => {
   const validationMsg = userSchema.validate(req.body);
 
@@ -61,6 +61,7 @@ userRoute.post("/register", async (req, res) => {
     const alreadyUser = await User.findOne({ email: req.body.email });
     if (alreadyUser) {
       res.send("User has already Register...");
+      console.log(alreadyUser);
     } else {
       const salt = await bcrypt.genSalt(10);
       const hash = await bcrypt.hash(req.body.password, salt);

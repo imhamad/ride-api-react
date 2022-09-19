@@ -10,15 +10,14 @@ const publishRideSchema = mongoose.Schema({
   },
   name: {
     type: String,
-    required: true,
+    // required: true,
   },
   email: {
     type: String,
-    required: true,
+    // required: true,
   },
   phone: {
     type: Number,
-    required: true,
   },
   status: {
     type: String,
@@ -33,6 +32,10 @@ const publishRideSchema = mongoose.Schema({
     Dateformat: "dd/mm/yyyy",
     required: true,
   },
+  ridePublisherId: {
+    type: String,
+    required: true
+  }
 });
 
 module.exports = mongoose.model("PublishRide", publishRideSchema);
