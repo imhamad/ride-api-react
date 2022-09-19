@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon api.js"
+    "start": "node api.js"
   },
   "keywords": [],
   "author": "",
@@ -23,7 +23,7 @@
     "nodemailer": "^6.7.2"
   },
   "devDependencies": {
-    "node": "^2.0.15"
+    "nodemon": "^2.0.15"
   },
   "engines": {
     "node": ">= 8.0.0"
