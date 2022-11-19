@@ -10,10 +10,10 @@ const nodemailer = require("nodemailer");
 
 const userSchema = Joi.object({
   fullName: Joi.string().min(3).max(100).required(),
-  userName: Joi.string().alphanum().min(3).max(100).required(),
+  userName: Joi.string().alphanum().min(3).max(100),
   email: Joi.string().email().required(),
   password: Joi.string().min(3).max(50).required(),
-  userType: Joi.string().min(3).max(20).required(),
+  userType: Joi.string().min(3).max(20),
 });
 
 userRoute.get("/", (req, res) => {

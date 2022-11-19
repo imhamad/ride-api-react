@@ -12,6 +12,19 @@ requestRideRoute.get("/", async (req, res) => {
   }
 });
 
+// get request ride from specific user
+requestRideRoute.get(`/${userId}`, async (req, res) => {
+  try {
+    const requestedRides = await RequestRide.find();
+    const filterRequestedRides = requestedRides?.filter(ride => ride?.publisherId === userId);
+
+    res.json(filterRequestedRides);
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+
 // post request
 requestRideRoute.post("/", async (req, res) => {
   try {
