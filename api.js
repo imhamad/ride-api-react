@@ -1,7 +1,7 @@
 const express = require("express");
 const publishrideRoute = require("./routes/publishride");
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 1997;
 const mongoose = require("mongoose");
 const userRoute = require("./routes/user");
 const requestRideRoute = require("./routes/requestride");
@@ -44,7 +44,7 @@ app.post("/upload/:id", (req, res) => {
 });
 
 // Connect to the Mongo DB
-mongoose.connect(process.env.DB_CONNECTION, () => {
+mongoose.connect("mongodb+srv://waliullah:mongodbUser12345@cluster0.82j4q.mongodb.net/trusticar_db?retryWrites=true&w=majority", () => {
   console.log("Connected to the Database!");
 });
 

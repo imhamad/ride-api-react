@@ -10,10 +10,10 @@ const nodemailer = require("nodemailer");
 
 const userSchema = Joi.object({
   fullName: Joi.string().min(3).max(100).required(),
-  userName: Joi.string().alphanum().min(3).max(100),
+  userName: Joi.string().alphanum().min(3).max(100).required(),
   email: Joi.string().email().required(),
-  password: Joi.string().min(3).max(50).required(),
-  userType: Joi.string().min(3).max(20),
+  password: Joi.string().min(3).max(50).required().required(),
+  userType: Joi.string().min(3).max(20).required(),
 });
 
 userRoute.get("/", (req, res) => {
@@ -84,22 +84,26 @@ userRoute.post("/login", async (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
 
-  const user = await User.findOne({ email: email });
-  if (!user) {
-    res.send("User not found...");
-  } else {
-    const validPassword = await bcrypt.compare(password, user.password);
-    if (!validPassword) {
-      res.send("Invalid Password...");
+  try {
+    const user = await User.findOne({ email: email });
+    if (!user) {
+      res.status(404).send("User not found...");
     } else {
-      // create token if user is valid
-      const token = jwt.sign(
-        { _id: user._id, iat: Date.now() },
-        process.env.SECRET
-      );
-      // res.send("Login Successfull !!!");
-      res.send({ token: token, user: user });
+      const validPassword = await bcrypt.compare(password, user.password);
+      if (!validPassword) {
+        res.send("Invalid Password...");
+      } else {
+        // create token if user is valid
+        const token = jwt.sign(
+          { _id: user._id, iat: Date.now() },
+          process.env.SECRET
+        );
+        // res.send("Login Successfull !!!");
+        res.send({ token: token, user: user });
+      }
     }
+  } catch (error) {
+    console.log(error)
   }
 });
 

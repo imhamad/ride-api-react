@@ -13,7 +13,8 @@ requestRideRoute.get("/", async (req, res) => {
 });
 
 // get request ride from specific user
-requestRideRoute.get(`/${userId}`, async (req, res) => {
+requestRideRoute.get(`/:id`, async (req, res) => {
+  const userId = req.params.id;
   try {
     const requestedRides = await RequestRide.find();
     const filterRequestedRides = requestedRides?.filter(ride => ride?.publisherId === userId);
